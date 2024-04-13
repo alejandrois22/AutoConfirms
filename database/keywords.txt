@@ -1,0 +1,4 @@
+nc
+no confirm
+avg
+mor

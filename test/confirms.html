@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Simulación de Página de Trades</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  .company { margin-bottom: 20px; }
+  .trade { margin-left: 20px; margin-top: 5px; }
+  a { text-decoration: none; color: blue; cursor: pointer; }
+  a:hover { text-decoration: underline; }
+  .bullet { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
+  .blue { background-color: blue; }
+  .red { background-color: red; }
+</style>
+</head>
+<body>
+<h1>Simulación de Página de Trades</h1>
+
+<!-- Contenedor para la nueva pestaña -->
+<script>
+  function sendEmail(tradeId, tradeContent) {
+    // Abrir una nueva ventana y mostrar los detalles del trade
+    const newWindow = window.open("", "_blank");
+    newWindow.document.write(`<h1>Confirmación de Envío de Email</h1>`);
+    newWindow.document.write(`<p>Se ha enviado el email para el trade: <strong>${tradeId}</strong></p>`);
+    newWindow.document.write(`<p>Detalle del trade: <strong>${tradeContent}</strong></p>`);
+    newWindow.document.write('<p><a href="#" onclick="window.close();">Cerrar</a></p>');
+    newWindow.document.close(); // Asegura que el contenido se muestra inmediatamente
+  }
+</script>
+
+<!-- Generar compañías y trades de manera dinámica -->
+<script>
+  const companies = [
+    "Goldman Sachs", "Morgan Stanley", "JPMorgan Chase", "Barclays", "HSBC",
+    "Deutsche Bank", "Credit Suisse", "UBS", "Citigroup", "Bank of America",
+    "Wells Fargo", "BNP Paribas", "Société Générale", "Scotiabank", "RBC Capital Markets", "Aurubis AG",
+    "Hyundai AVG", "Meta NC", "Tercel No Confirm",
+  ];
+  const metals = ["oro", "plata", "cobre","platino", "paladio", "diamante"];
+  let htmlContent = "";
+
+  companies.forEach((company, index) => {
+    htmlContent += `<div class="company"><strong>${company}</strong>`;
+    const numTrades = Math.floor(Math.random() * 8) + 3; // 3 a 10 trades aleatoriamente
+    for (let i = 1; i <= numTrades; i++) {
+      const transactionType = Math.random() > 0.5 ? 'Buy' : 'Sell';
+      const bulletColor = transactionType === 'Buy' ? 'blue' : 'red';
+      const metal = metals[Math.floor(Math.random() * metals.length)];
+      const quantity = Math.floor(Math.random() * 9000) + 1000;
+      const price = Math.floor(Math.random() * 2000) + 1000;
+      const tradeId = `${Math.floor(Math.random() * 100000000 + 100000000)}`;
+      const tradeContent = `${tradeId} <span class='bullet ${bulletColor}'></span> ${transactionType} ${metal} ${quantity} troy oz @ US$${price}, ${company}`;
+      htmlContent += `<div class="trade">${tradeContent} <a href="#" onclick="sendEmail('${tradeId}', '${tradeContent.replace(/'/g, "\\'")}');">send email</a></div>`;
+    }
+    htmlContent += `</div>`;
+  });
+
+  document.write(htmlContent);
+</script>
+
+</body>
+</html>
